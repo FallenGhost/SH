@@ -9,12 +9,14 @@ int DD = A3;
 int Relay1 = 7;
 int Relay2 = 8;
 int SHIM = 3;
+int SHIM2 = 2;
 float Data1 = 0;
 float Data2 = 0;
 float DataD = 0;
 int Dat1 = 0;
 int Dat2 = 0;
 int DatD = 0;
+int Dat4 = 0;
 float Data11 = 0;
 float Data12 = 0;
 float Data1D = 0;
@@ -26,7 +28,7 @@ long prqMillis = 0;
 long interval = 1000;
 long interval1 = 3000;
 long interval2 = 4000;
-long interval3 = 2000;
+long interval3 = 3000;
 int Nach = 150;
 int p = 15;
 double DDR = 0;
@@ -40,12 +42,19 @@ void setup() {
   pinMode(Relay1, OUTPUT);
   pinMode(Relay2, OUTPUT);
   pinMode(SHIM, OUTPUT);
+  pinMode(SHIM2, OUTPUT);
   lcd.begin(16, 2);
   lcd.clear();
   pinMode(p, OUTPUT);
 }
 
+void(* resetFunc) (void) = 0;
+
 void loop() {
+	Dat4 = analogRead(SHIM2);
+	if (Dat2 >= 512){
+	Nach = 80;
+	}
   digitalWrite(Relay1, HIGH);
   digitalWrite(Relay2, HIGH);
   Dat1 = analogRead(Da1);
@@ -59,6 +68,7 @@ void loop() {
   Data1 = Data11 / (R2 / (R1 + R2));
   Data2 = Dat2 * 0.0049;
   DataD = Data1D / (R2 / (R1 + R2));
+  unsigned long REb = millis();
   unsigned long currentMillis = millis();
   unsigned long curMillis = millis();
   unsigned long cMillis = millis();
@@ -123,8 +133,8 @@ void loop() {
     if (cqMillis - prqMillis > interval3) {
       prqMillis = cqMillis;
       Nach = Nach + 3;
-      if (Nach >= 255) {
-        Nach = 255;
+      if (Nach >= 90) {
+        Nach = 90;
       }
     }
       analogWrite(SHIM, Nach);
@@ -133,17 +143,17 @@ void loop() {
       if (c2Millis - pr2Millis > interval3) {
         pr2Millis = c2Millis;
       Nach = Nach - 3;
-      if (Nach <= 0) {
-        Nach = 0;
+      if (Nach <= 52) {
+        Nach = 52;
       }
       }
       analogWrite(SHIM, Nach);
 
     }
-    if (Nach <= 0) {
-      Nach = 0;
-    } else if (Nach >= 255) {
-      Nach = 255;
+    if (Nach <= 52) {
+      Nach = 52;
+    } else if (Nach >= 90) {
+      Nach = 90;
     }
     Nach1 = Nach / 2.56;
     Nach2 = (Nach / 51.2) * 2;
@@ -172,4 +182,7 @@ void loop() {
     Serial.println(Dat1);
     Serial.println(Data11);
     Serial.println("  ");
+	if (REb >= 3600000){
+		resetFunc();
   }
+}
