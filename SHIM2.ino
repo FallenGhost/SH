@@ -182,7 +182,7 @@ void loop() {
     Serial.println(Dat1);
     Serial.println(Data11);
     Serial.println("  ");
-	if (REb >= 3600000){
+	if (REb >= 7200000){
 		resetFunc();
   }
 }
